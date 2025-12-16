@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Daily Record</title>
+</head>
+<body>
+
+<h2>Daily Record</h2>
+
+<label>Date:</label>
+<input type="date" id="date"><br><br>
+
+<label>Count:</label>
+<input type="number" id="count"><br><br>
+
+<label>Screenshot:</label>
+<input type="file" id="file"><br><br>
+
+<button onclick="submitData()">Submit</button>
+
+<script>
+function submitData() {
+  const file = document.getElementById("file").files[0];
+  const reader = new FileReader();
+
+  reader.onloadend = function () {
+    const base64 = reader.result.split(",")[1];
+
+    fetch("https://script.google.com/macros/s/AKfycbyhKPaDoc-i5ov7afEre0vR1wCtaiFYwSn0gGkpomLcW75yGTtzBYmzP56qcQafEo6q/exec", {
+      method: "POST",
+      body: new URLSearchParams({
+        date: document.getElementById("date").value,
+        count: document.getElementById("count").value,
+        screenshot: base64
+      })
+    }).then(() => alert("Saved Successfully"));
+  };
+
+  reader.readAsDataURL(file);
+}
+</script>
+
+</body>
+</html>
